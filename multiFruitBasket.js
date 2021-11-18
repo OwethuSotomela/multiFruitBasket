@@ -33,7 +33,10 @@ module.exports = function MultiFruitBasket(pool) {
     }
 
     async function removeFruit() {
-
+        var multiFruitCart = await pool.query(`SELECT * FROM fruit_basket_item WHERE fruit_type = $1`, [fruit])
+        if (multiFruitCart.rows.length != 0) {
+            await pool.query(`DELETE FROM fruit_basket_item WHERE fruit_type = $1`, [fruit])
+        }
     }
 
     return {
