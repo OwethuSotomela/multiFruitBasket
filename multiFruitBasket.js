@@ -8,7 +8,7 @@ module.exports = function MultiFruitBasket(pool) {
         }
         var afterInserting = await pool.query(`SELECT * FROM multi_fruit_basket WHERE name = $1`, [fruit])
         await pool.query(`INSERT INTO fruit_basket_item (fruit_type, quantity, price, multi_fruit_basket_id) VALUES ($1, $2, $3, $4)`, [fruit, qty, price, afterInserting.rows[0].id])
-        console.log(afterInserting.rows)
+        // console.log(afterInserting.rows)
     }
 
     async function getBasket() {
@@ -18,7 +18,7 @@ module.exports = function MultiFruitBasket(pool) {
 
     async function getFruit() {
         var getFruit = await pool.query("SELECT fruit_type, quantity, price FROM fruit_basket_item");
-        console.log(getFruit.rows)
+        // console.log(getFruit.rows)
         return getFruit.rows;
     }
 
@@ -29,13 +29,17 @@ module.exports = function MultiFruitBasket(pool) {
         }
         var afterUpdating = await pool.query(`SELECT * FROM multi_fruit_basket WHERE name = $1`, [fruit])
         await pool.query(`INSERT INTO fruit_basket_item (fruit_type, quantity, price, multi_fruit_basket_id) VALUES ($1, $2, $3, $4)`, [fruit, qty, price, afterUpdating.rows[0].id])
-        console.log(afterUpdating.rows)
+        // console.log(afterUpdating.rows)
     }
 
-    async function removeFruit() {
-        var multiFruitCart = await pool.query(`SELECT * FROM fruit_basket_item WHERE fruit_type = $1`, [fruit])
-        if (multiFruitCart.rows.length != 0) {
+    async function removeFruit(fruit) {
+        var fruitItems = await pool.query(`SELECT * FROM fruit_basket_item WHERE fruit_type = $1`, [fruit])
+        if (fruitItems.rows.length != 0) {
             await pool.query(`DELETE FROM fruit_basket_item WHERE fruit_type = $1`, [fruit])
+        }
+        var afterDeletingItem = await pool.query(`SELECT * FROM multi_fruit_basket WHERE name = $1`, [fruit])
+        if(afterDeletingItem.rows.length != 0){
+            await pool.query(`DELETE FROM multi_fruit_basket WHERE name = $1`, [fruit])
         }
     }
 

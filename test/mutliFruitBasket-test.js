@@ -85,3 +85,18 @@ describe('Adding to Existing Basket', async function () {
             , await multiBasket.getFruit())
     })
 });
+
+describe('Remove fruit', async function(){
+    it('Should remove fruit from an existing basket', async function (){
+
+        await multiBasket.createBasket("Banana", 1, 3)
+        await multiBasket.createBasket("Apple", 1, 5)
+        await multiBasket.createBasket("Orange", 1, 5)
+
+        await multiBasket.removeFruit("Banana", 3, 9)
+        await multiBasket.removeFruit("Apple", 3, 5)
+        await multiBasket.removeFruit("Orange", 3, 5)
+
+        assert.deepEqual([], await multiBasket.getFruit())
+    })
+})
