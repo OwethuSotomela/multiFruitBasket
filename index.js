@@ -3,7 +3,7 @@ const app = express();
 const multiFruitBasket = require('./multiFruitBasket');
 const { Pool } = require('pg');
 
-const connectionString = process.env.DATABASE_URL || 'postgresql://codex:codex123@localhost:5432/multiBaskets';
+const connectionString = process.env.DATABASE_URL || 'postgresql://localhost:5432/travis_ci_test';
 
 const pool = new Pool({
 	connectionString: connectionString,
