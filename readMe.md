@@ -1,0 +1,1 @@
+[![Build Status](https://app.travis-ci.com/OwethuSotomela/multiFruitBasket.svg?branch=main)](https://app.travis-ci.com/OwethuSotomela/multiFruitBasket)
