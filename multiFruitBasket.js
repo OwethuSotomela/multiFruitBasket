@@ -16,6 +16,21 @@ module.exports = function MultiFruitBasket(pool) {
         return getBasket.rows;
     }
 
+    async function addFruit(fruit, qty, price) {
+        var multiFruitCart = await pool.query(`SELECT * FROM fruit_basket_item WHERE fruit_type = $1`, [fruit])
+        if (multiFruitCart.rows.length != 0) {
+            await pool.query(`UPDATE multi_fruit_basket SET name = name WHERE name = $1`, [fruit])
+        }
+        var afterUpdating = await pool.query(`SELECT * FROM multi_fruit_basket WHERE name = $1`, [fruit])
+        if (afterUpdating.rows.length != 0) {
+            await pool.query(`UPDATE fruit_basket_item SET quantity = quantity + $2 WHERE fruit_type = $1`, [fruit, qty])
+        } else {
+            await pool.query(`INSERT INTO fruit_basket_item (fruit_type, quantity, price, multi_fruit_basket_id) VALUES ($1, $2, $3, $4)`, [fruit, qty, price, afterUpdating.rows[0].id])
+        }
+        // await pool.query(`INSERT INTO fruit_basket_item (fruit_type, quantity, price, multi_fruit_basket_id) VALUES ($1, $2, $3, $4)`, [fruit, qty, price, afterUpdating.rows[0].id])
+        // console.log(afterUpdating.rows)
+    }
+
     async function getId(fruitName) {
         var IdOfFruitNamePassed = await pool.query(`SELECT id FROM multi_fruit_basket WHERE name = $1`, [fruitName])
         return IdOfFruitNamePassed.rows;
@@ -62,6 +77,7 @@ module.exports = function MultiFruitBasket(pool) {
     return {
         createBasket,
         getFruit,
+        addFruit,
         removeFruit,
         getBasket,
         getBasketById,

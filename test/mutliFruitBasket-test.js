@@ -25,7 +25,7 @@ describe('Create a fruit basket', async function () {
         await multiBasket.createBasket("Apple", 1, 5)
         await multiBasket.createBasket("Orange", 1, 5)
 
-        assert.deepEqual([{"name": "Banana"}, {"name": "Apple"}, {"name": "Orange"}], await multiBasket.getBasket())
+        assert.deepEqual([{ "name": "Banana" }, { "name": "Apple" }, { "name": "Orange" }], await multiBasket.getBasket())
     });
 });
 
@@ -35,26 +35,30 @@ describe('Adding to Existing Basket', async function () {
         await multiBasket.createBasket("Apple", 1, 5)
         await multiBasket.createBasket("Orange", 1, 5)
 
-        assert.deepEqual([
-            {
-                "fruit_type": "Banana",
-                "price": "3.00",
-                "quantity": "1",
-            },
-            {
-                "fruit_type": "Apple",
-                "price": "5.00",
-                "quantity": "1"
-            },
-            {
-                "fruit_type": "Orange",
-                "price": "5.00",
-                "quantity": "1"
-            }
-        ]
-            , await multiBasket.getFruit())
-    })
-});
+        await multiBasket.addFruit("Banana", 4, 3)
+        await multiBasket.addFruit("Apple", 8, 5)
+        await multiBasket.addFruit("Orange", 20, 5)
+
+        assert.deepEqual([{
+            "fruit_type": "Banana",
+            "price": "3.00",
+            "quantity": "5",
+        },
+        {
+            "fruit_type": "Apple",
+            "price": "5.00",
+            "quantity": "9"
+        },
+        {
+            "fruit_type": "Orange",
+            "price": "5.00",
+            "quantity": "21"
+        },
+
+        ], await multiBasket.getFruit())
+    });
+
+})
 
 describe('Remove fruit', async function () {
     it('Should remove fruit from an existing basket', async function () {
